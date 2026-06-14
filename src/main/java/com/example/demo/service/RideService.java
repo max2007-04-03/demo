@@ -31,31 +31,25 @@ public class RideService {
         Scooter scooter = scooterRepository.findById(scooterId)
                 .orElseThrow(() -> new RuntimeException("Самокат не знайдено"));
 
-        // Пошук користувача для створення запису про поїздку
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Користувач не знайдений"));
 
-        // 1. Генеруємо випадковий час поїздки від 0 до 30 хвилин
         int rideDuration = new Random().nextInt(31);
 
-        // 2. Розраховуємо втрату заряду (0.8% за хвилину)
         int batteryLoss = (int) (rideDuration * 0.8);
         int newBatteryLevel = Math.max(0, scooter.getBatteryLevel() - batteryLoss);
 
-        // 3. Оновлюємо дані самоката
         scooter.setBatteryLevel(newBatteryLevel);
         scooter.setStatus(ScooterStatus.IN_USE);
         scooter.setAvailableAfter(LocalDateTime.now().plusMinutes(rideDuration));
         scooterRepository.save(scooter);
 
-        // 4. Створюємо новий об'єкт поїздки
         Ride ride = new Ride();
         ride.setUser(user);
         ride.setScooter(scooter);
         ride.setStartTime(LocalDateTime.now());
         ride.setDurationMinutes(rideDuration);
 
-        // Зберігаємо поїздку в базу даних та повертаємо її
         return rideRepository.save(ride);
     }
 

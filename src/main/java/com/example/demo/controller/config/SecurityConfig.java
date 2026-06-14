@@ -34,7 +34,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // Оставляем только PasswordEncoder!
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
