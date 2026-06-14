@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   postgres-db:
-    image: postgres:latest
+    image: postgres:17
     container_name: scooter_db
     environment:
       POSTGRES_USER: postgres
