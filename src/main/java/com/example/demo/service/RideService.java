@@ -31,6 +31,10 @@ public class RideService {
         Scooter scooter = scooterRepository.findById(scooterId)
                 .orElseThrow(() -> new RuntimeException("Самокат не знайдено"));
 
+        if (scooter.getStatus() != ScooterStatus.AVAILABLE) {
+            throw new RuntimeException("Самокат недоступний для оренди (статус: " + scooter.getStatus() + ")");
+        }
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Користувач не знайдений"));
 
